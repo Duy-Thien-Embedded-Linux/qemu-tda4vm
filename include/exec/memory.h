@@ -783,7 +783,7 @@ struct MemoryRegion {
     /* owner as TYPE_DEVICE. Used for re-entrancy checks in MR access hotpath */
     DeviceState *dev;
 
-    const MemoryRegionOps *ops;
+    const MemoryRegionOps *ops;  /* read/write representation for this specific memory region */
     void *opaque;
     MemoryRegion *container;
     int mapped_via_alias; /* Mapped via an alias, container might be NULL */

@@ -143,6 +143,9 @@ static void xlnx_zcu102_init(MachineState *machine)
                  ram_size);
     }
 
+    /**
+     *  Create the ZynqMP SoC as a child of the machine.
+     */ 
     object_initialize_child(OBJECT(machine), "soc", &s->soc, TYPE_XLNX_ZYNQMP);
 
     if (machine->audiodev) {
@@ -164,12 +167,22 @@ static void xlnx_zcu102_init(MachineState *machine)
         g_free(bus_name);
     }
 
+    /**
+     * The SoC is owned by the machine and lives as long as the machine does
+     */
     qdev_realize(DEVICE(&s->soc), NULL, &error_fatal);
 
-    /* Attach bbram backend, if given */
+    /**
+     * Storage backends in QEMU provide the actual storage for emulated devices. 
+     * They can be files, physical devices, network resources, or memory. 
+     * The  bbram_attach_drive and  efuse_attach_drive functions connect the BBRAM and EFUSE devices to their respective storage backends, 
+     * allowing these devices to persist their state across QEMU restarts.
+     */
+
+    /* Attach bbram backend, if given. bbram stand for Battery Backup RAM*/
     bbram_attach_drive(&s->soc.bbram);
 
-    /* Attach efuse backend, if given */
+    /* Attach efuse backend, if given. efuse stand for Electrically Erasable Programmable Read-Only Memory */
     efuse_attach_drive(&s->soc.efuse);
 
     /* Create and plug in the SD cards */
@@ -274,12 +287,26 @@ static void xlnx_zcu102_machine_class_init(ObjectClass *oc, void *data)
     mc->desc = "Xilinx ZynqMP ZCU102 board with 4xA53s and 2xR5Fs based on " \
                "the value of smp";
     mc->init = xlnx_zcu102_init;
+    /**
+     * Block device in Linux Guest OS is IDE (/dev/hda)
+     */
     mc->block_default_type = IF_IDE;
+    /**
+     * This setting refers to the number of devices that can be attached to each instance of the default block device bus type
+     */
     mc->units_per_default_bus = 1;
+    /**
+     * Not all memory access will be successful since we're not modeling all memory mapped device
+     * QEMU will continue execution even if a memory transaction fails
+     */
     mc->ignore_memory_transaction_failures = true;
     mc->max_cpus = XLNX_ZYNQMP_NUM_APU_CPUS + XLNX_ZYNQMP_NUM_RPU_CPUS;
     mc->default_cpus = XLNX_ZYNQMP_NUM_APU_CPUS;
     mc->default_ram_id = "ddr-ram";
+    /**
+     * QEMU will automatically create an SD card device for the machine
+     * It make sence since the real ZCU102 board has an SD card slot
+     */
     mc->auto_create_sdcard = true;
 
     machine_add_audiodev_property(mc);

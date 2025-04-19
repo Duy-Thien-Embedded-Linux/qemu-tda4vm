@@ -189,8 +189,8 @@ static void dt_rtc_create(void *fdt, const char *i2c, const char *alias)
     g_free(rtc);
 }
 
-static void dt_i2c_create(void *fdt, const char *soc, const char *mpic,
-                             const char *alias)
+static void dt_te(void *fdt, const char *soc, const char *mpic,
+                i2c_crea             const char *alias)
 {
     hwaddr mmio0 = MPC8544_I2C_REGS_OFFSET;
     int irq0 = MPC8544_I2C_IRQ;
