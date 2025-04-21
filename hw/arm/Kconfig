@@ -105,6 +105,13 @@ config A72SS
     default y
     depends on TCG && ARM
 
+config TDA4VH
+    bool
+    default y
+    depends on TCG && AARCH64
+    select ARM_GIC
+    select DEVICE_TREE
+
 config MUSCA
     bool
     default y

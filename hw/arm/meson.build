@@ -20,6 +20,7 @@ arm_ss.add(when: 'CONFIG_STM32VLDISCOVERY', if_true: files('stm32vldiscovery.c')
 arm_ss.add(when: 'CONFIG_ZYNQ', if_true: files('xilinx_zynq.c'))
 arm_ss.add(when: 'CONFIG_SABRELITE', if_true: files('sabrelite.c'))
 arm_ss.add(when: 'CONFIG_A72SS', if_true: files('A72SS.c'))
+arm_ss.add(when: 'CONFIG_TDA4VH', if_true: files('tda4vh_a72ss.c', 'tda4vh_machine.c'))
 
 arm_ss.add(when: 'CONFIG_ARM_V7M', if_true: files('armv7m.c'))
 arm_ss.add(when: 'CONFIG_EXYNOS4', if_true: files('exynos4210.c'))
